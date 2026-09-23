@@ -43,20 +43,31 @@
 
     <article class="apartat" id="apartat1">
       <h2>1. Instal·lació de SO</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Un cop arrencat
-         el suport d'instal·lació, cal seguir l'assistent i triar les opcions de
-         particionat abans de continuar. <strong>Aquest pas és irreversible</strong>,
-         així que revisa bé el disc de destinació.</p>
+      <p>Per a la realització d'aquesta pràctica s'ha dut a terme la instal·lació des de zero del sistema operatiu <strong>Ubuntu Desktop (versió LTS)</strong> en un entorn virtualitzat utilitzant l'hipervisor <strong>VirtualBox</strong>. Aquest procés estableix la base del sistema per a un ús general i de desenvolupament informàtic.</p>
+      <p>Abans de procedir amb l'assistent, s'ha creat una màquina virtual assignant-li els recursos necessaris: 4 GB de memòria RAM, 2 vCPUs i un disc dur virtual dinàmic de 25 GB.</p>
+
+      <h3>Pas a pas del procés d'instal·lació:</h3>
       <ul>
-        <li>Arrencar des del USB o la imatge ISO.</li>
-        <li>Triar l'idioma i la distribució de teclat.</li>
-        <li>Configurar el particionat del disc.</li>
-        <li>Esperar que finalitzi la còpia d'arxius i reiniciar.</li>
+        <li><strong>Arrencar des de la imatge ISO:</strong> S'ha descarregat la ISO oficial d'Ubuntu i s'ha muntat a la unitat d'òptica virtual. En iniciar la màquina, el gestor d'arrencada carrega directament l'assistent d'instal·lació.</li>
+        <li><strong>Triar l'idioma i la distribució de teclat:</strong> Es selecciona l'idioma del sistema (Català / Espanyol) i es configura la distribució de teclat per assegurar que caràcters especials com accents, símbols i la c trencada (ç) funcionin correctament.</li>
+        <li><strong>Configurar el particionat del disc:</strong> Es tria l'opció de particionat automàtic sobre el disc virtual de 25 GB. Aquest mètode crea un sistema de fitxers principal <code>ext4</code> per a l'arrel (<code>/</code>) i assigna un espai d'intercanvi (<code>swap</code>). <strong>Aquest pas és irreversible</strong>, ja que aplica un formatat complet al disc de destinació.</li>
+        <li><strong>Configuració d'usuari i nom de l'equip:</strong> Es defineix el nom de la màquina (<em>hostname</em>: <code>ubuntu-practica0</code>), el nom de l'usuari principal i la contrasenya d'accés amb privilegis d'administració (<code>sudo</code>).</li>
+        <li><strong>Còpia de fitxers i reinici:</strong> S'espera a que finalitzi el procés de còpia d'arxius del sistema. Un cop completat, s'extreu la imatge ISO virtual de la unitat i es reinicia la màquina virtual.</li>
       </ul>
-      <img src="../img/exemple.svg" alt="Exemple de captura de pantalla de l'assistent d'instal·lació">
-      <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-         Un cop reiniciat el sistema, comprova que arrenca correctament i que
-         reconeix tot el maquinari abans de continuar amb el següent apartat.</p>
+
+      <p>A continuació es mostren les captures de pantalla corresponents al procés d'instal·lació:</p>
+
+      <img src="../img/01_instalacio_idioma.png" alt="Captura de pantalla de l'assistent d'instal·lació d'Ubuntu triant idioma i teclat">
+      <p><em>Imatge 1.1: Selecció d'idioma i configuració de la distribució de teclat a l'assistent.</em></p>
+
+      <img src="../img/02_particionat_disc.png" alt="Captura de pantalla del particionat de disc a la instal·lació d'Ubuntu">
+      <p><em>Imatge 1.2: Selecció del mètode de particionat automàtic sobre la unitat de disc virtual.</em></p>
+
+      <p><strong>Verificació final:</strong> Un cop reiniciat el sistema, es comprova que l'escriptori d'Ubuntu arrenca correctament, es carrega la interfície gràfica (GNOME) i el sistema reconeix tot el maquinari virtualitzat sense cap mena d'error.</p>
+
+      <img src="../img/03_escriptori_ubuntu.png" alt="Captura de pantalla de l'escriptori d'Ubuntu ja instal·lat i funcional">
+      <p><em>Imatge 1.3: Escriptori principal d'Ubuntu inicialitzat correctament després del primer reinici.</em></p>
+
       <p class="tornar-index"><a href="#index-apartats">↑ Tornar a l'índex</a></p>
     </article>
     <article class="apartat" id="apartat2">
