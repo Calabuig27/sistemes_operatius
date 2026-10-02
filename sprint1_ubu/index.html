@@ -1,85 +1,38 @@
-<!DOCTYPE html>
-<html lang="ca">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sprint 1 · Pin Package (APT Pinning)</title>
-<link rel="stylesheet" href="../css/estils.css">
-</head>
-<body>
+<article class="apartat" id="apartat1">
+  <h2>1. Pin Package (Bloqueig de paquets amb APT)</h2>
+  <p>Aquesta secció explica com utilitzar la funcionalitat de <strong>pinning</strong> (o fixació/bloqueig de paquets) en el gestor de paquets APT d'Ubuntu. Aquesta tècnica permet controlar quina versió d'un paquet s'ha d'instal·lar o evitar que un paquet concret s'actualitzi automàticament durant les actualitzacions generals del sistema (<code>sudo apt upgrade</code>).</p>
 
-<header class="hero">
-  <nav class="hero-nav">
-    <a href="../index.html">Portada</a>
-    <a href="../sprints_ubu.html">Índex de sprints Ubuntu</a>
-    <a href="../sprints_win.html">Índex de sprints Windows</a>
-    <a href="https://github.com/Calabuig27/sistemes_operatius" target="_blank" rel="noopener">Codi a GitHub ↗</a>
-  </nav>
-  <div class="hero-titol">
-    <p class="miguetes"><a href="../index.html">Portada</a> / <a href="../sprints_ubu.html">Índex de sprints Ubuntu</a> / Sprint 1</p>
-    <h1>Sprint 1 · Gestió avançada de paquets (Pin Package)</h1>
-    <p class="subtitol">Índex d'apartats d'aquest sprint</p>
-  </div>
-</header>
+  <h3>Mètodes principals de configuració:</h3>
+  <ul>
+    <li><strong>Consultar les polítiques de paquets (apt-cache policy):</strong> Permet comprovar quina versió del paquet tenim instal·lada, quines versions hi ha disponibles i quina prioritat té assignada cadascuna.</li>
+    <li><strong>Configuració personalitzada amb Nano (APT Preferences):</strong> Mitjançant l'editor <code>nano</code> es crea un fitxer dins del directori <code>/etc/apt/preferences.d/</code> per assignar una prioritat alta (<em>Pin-Priority</em>) a la versió que volem bloquejar.</li>
+  </ul>
 
-<main class="contenidor">
-  <section class="panell">
-    <a id="index-apartats"></a>
-    <table class="taula-apartats">
-      <thead>
-        <tr><th>#</th><th>Apartat</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>1</td><td><a href="#apartat1">Pin Package (Bloqueig de paquets amb APT)</a></td></tr>
-      </tbody>
-    </table>
+  <h3>Exemple pràctic pas a pas:</h3>
+  <p>En primer lloc, comprovem l'estat i la prioritat del paquet (per exemple, <code>nginx</code>):</p>
+  <pre><code>apt-cache policy nginx</code></pre>
 
-    <article class="apartat" id="apartat1">
-      <h2>1. Pin Package (Bloqueig de paquets amb APT)</h2>
-      <p>Aquesta secció explica com utilitzar la funcionalitat de <strong>pinning</strong> (o fixació/bloqueig de paquets) en el gestor de paquets APT d'Ubuntu. Aquesta tècnica permet controlar quina versió d'un paquet s'ha d'instal·lar o evitar que un paquet concret s'actualitzi automàticament durant les actualitzacions generals del sistema (<code>sudo apt upgrade</code>).</p>
+  <p>A continuació, creem el fitxer de configuració personalitzat de pinning amb l'editor <code>nano</code>:</p>
+  <pre><code>sudo nano /etc/apt/preferences.d/custom-pinning</code></pre>
 
-      <h3>Mètodes principals de configuració:</h3>
-      <ul>
-        <li><strong>Consultar les polítiques de paquets (apt-cache policy):</strong> Permet comprovar quina versió del paquet tenim instal·lada, quines versions hi ha disponibles i quina prioritat té assignada cadascuna.</li>
-        <li><strong>Configuració personalitzada amb Nano (APT Preferences):</strong> Mitjançant l'editor <code>nano</code> es crea un fitxer dins del directori <code>/etc/apt/preferences.d/</code> per assignar una prioritat alta (<em>Pin-Priority</em>) a la versió que volem bloquejar.</li>
-      </ul>
-
-      <h3>Exemple pràctic pas a pas:</h3>
-      <p>En primer lloc, comprovem l'estat i la prioritat del paquet (per exemple, <code>nginx</code>):</p>
-      <pre><code>apt-cache policy nginx</code></pre>
-
-      <p>A continuació, creem el fitxer de configuració personalitzat de pinning amb l'editor <code>nano</code>:</p>
-      <pre><code>sudo nano /etc/apt/preferences.d/custom-pinning</code></pre>
-
-      <p>Dins del fitxer, afegim les regles per fixar la versió desitjada i assignar-li prioritat:</p>
-      <pre><code>Package: nginx
+  <p>Dins del fitxer, afegim les regles per fixar la versió desitjada i assignar-li prioritat:</p>
+  <pre><code>Package: nginx
 Pin: version 1.18.*
 Pin-Priority: 1001</code></pre>
 
-      <p>Un cop desat el fitxer, tornem a executar la comprovació per verificar que s'ha aplicat el pinning:</p>
-      <pre><code>apt-cache policy nginx</code></pre>
+  <p>Un cop desat el fitxer, tornem a executar la comprovació per verificar que s'ha aplicat el pinning:</p>
+  <pre><code>apt-cache policy nginx</code></pre>
 
-      <p>A continuació es mostra la verificació del procés d'aplicació d'un pin package:</p>
+  <p>A continuació es mostra el vídeo demostratiu del procés d'aplicació d'un pin package:</p>
 
-      <img src="../img/01_pin_package.png" alt="Captura de pantalla de la comanda apt-cache policy i la configuració del fitxer personalitzat de pinning">
-      <p><em>Imatge 1.1: Aplicació i comprovació del bloqueig d'un paquet mitjançant fitxer de preferències APT.</em></p>
+  <!-- Element de vídeo substituint la imatge -->
+  <video class="video-demostració" autoplay loop muted playsinline controls>
+    <source src="../vid/01_pin_package.mp4" type="video/mp4">
+    El teu navegador no suporta el reproductor de vídeo HTML5.
+  </video>
+  <p><em>Vídeo 1.1: Demostració de l'aplicació i comprovació del bloqueig d'un paquet mitjançant fitxer de preferències APT.</em></p>
 
-      <p><strong>Verificació final:</strong> En tornar a consultar amb <code>apt-cache policy</code>, es pot confirmar que el paquet manté la prioritat definida (1001), evitant que <code>sudo apt upgrade</code> el modifiqui de manera no desitjada.</p>
+  <p><strong>Verificació final:</strong> En tornar a consultar amb <code>apt-cache policy</code>, es pot confirmar que el paquet manté la prioritat definida (1001), evitant que <code>sudo apt upgrade</code> el modifiqui de manera no desitjada.</p>
 
-      <p class="tornar-index"><a href="#index-apartats">↑ Tornar a l'índex</a></p>
-    </article>
-  </section>
-</main>
-
-<footer class="peu">
-  <p class="peu-llicencia">
-    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ca" target="_blank" rel="license noopener">
-      <img src="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png" alt="Llicència Creative Commons Reconeixement-NoComercial-CompartirIgual 4.0" width="88" height="31">
-    </a>
-    <span>Contingut sota llicència <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ca" target="_blank" rel="license noopener">CC BY-NC-SA 4.0</a></span>
-  </p>
-  <p class="autoria">Autor/a: <strong>Marc Calabuig Piñol</strong> · Pràctica 0 · Sistemes Operatius (ISOPJ1)</p>
-</footer>
-
-</body>
-</html>
+  <p class="tornar-index"><a href="#index-apartats">↑ Tornar a l'índex</a></p>
+</article>
