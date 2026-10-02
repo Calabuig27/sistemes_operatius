@@ -40,24 +40,31 @@
 
       <h3>Mètodes principals de configuració:</h3>
       <ul>
-        <li><strong>Bloqueig ràpid d'actualitzacions (apt-mark):</strong> Per evitar que un paquet s'actualitzi de manera temporal o permanent, s'utilitza la comanda <code>sudo apt-mark hold &lt;nom_paquet&gt;</code>. Per desfer el bloqueig, es fa servir <code>unhold</code>.</li>
-        <li><strong>Configuració de preferències avançades (APT Preferences):</strong> Creant un fitxer a <code>/etc/apt/preferences.d/</code> es poden definir regles específiques assignant prioritats (<em>Pin-Priority</em>) a diferents versions o orígens de paquets.</li>
+        <li><strong>Consultar les polítiques de paquets (apt-cache policy):</strong> Permet comprovar quina versió del paquet tenim instal·lada, quines versions hi ha disponibles i quina prioritat té assignada cadascuna.</li>
+        <li><strong>Configuració personalitzada amb Nano (APT Preferences):</strong> Mitjançant l'editor <code>nano</code> es crea un fitxer dins del directori <code>/etc/apt/preferences.d/</code> per assignar una prioritat alta (<em>Pin-Priority</em>) a la versió que volem bloquejar.</li>
       </ul>
 
-      <h3>Exemple pràctic de bloqueig:</h3>
-      <p>Per exemple, per fixar la versió del servidor web <code>nginx</code> i evitar actualitzacions no desitjades:</p>
-      <pre><code># Executar la comanda de bloqueig
-sudo apt-mark hold nginx
+      <h3>Exemple pràctic pas a pas:</h3>
+      <p>En primer lloc, comprovem l'estat i la prioritat del paquet (per exemple, <code>nginx</code>):</p>
+      <pre><code>apt-cache policy nginx</code></pre>
 
-# Comprovar la llista de paquets retinguts
-apt-mark showhold</code></pre>
+      <p>A continuació, creem el fitxer de configuració personalitzat de pinning amb l'editor <code>nano</code>:</p>
+      <pre><code>sudo nano /etc/apt/preferences.d/custom-pinning</code></pre>
+
+      <p>Dins del fitxer, afegim les regles per fixar la versió desitjada i assignar-li prioritat:</p>
+      <pre><code>Package: nginx
+Pin: version 1.18.*
+Pin-Priority: 1001</code></pre>
+
+      <p>Un cop desat el fitxer, tornem a executar la comprovació per verificar que s'ha aplicat el pinning:</p>
+      <pre><code>apt-cache policy nginx</code></pre>
 
       <p>A continuació es mostra la verificació del procés d'aplicació d'un pin package:</p>
 
-      <img src="../img/01_pin_package.png" alt="Captura de pantalla de la comanda apt-mark hold i la verificació del paquet">
-      <p><em>Imatge 1.1: Aplicació i comprovació del bloqueig d'un paquet mitjançant apt-mark.</em></p>
+      <img src="../img/01_pin_package.png" alt="Captura de pantalla de la comanda apt-cache policy i la configuració del fitxer personalitzat de pinning">
+      <p><em>Imatge 1.1: Aplicació i comprovació del bloqueig d'un paquet mitjançant fitxer de preferències APT.</em></p>
 
-      <p><strong>Verificació final:</strong> Quan s'executa un <code>sudo apt upgrade</code>, el sistema notifica que el paquet es troba en estat <em>kept back</em> (mantingut en la versió actual), confirmant que el pinning funciona correctament.</p>
+      <p><strong>Verificació final:</strong> En tornar a consultar amb <code>apt-cache policy</code>, es pot confirmar que el paquet manté la prioritat definida (1001), evitant que <code>sudo apt upgrade</code> el modifiqui de manera no desitjada.</p>
 
       <p class="tornar-index"><a href="#index-apartats">↑ Tornar a l'índex</a></p>
     </article>
