@@ -1,7 +1,7 @@
-/* Full de estils comu per a tot el lloc.
-   Enllaça-la sempre igual:
-   <link rel="stylesheet" href="../css/estils.css">  (des d'una carpeta de sprint)
-   <link rel="stylesheet" href="css/estils.css">      (des de l'arrel) */
+/* Full d'estils comú per a tot el lloc.
+   Enllaça'l sempre igual:
+   <link rel="stylesheet" href="../css/estils.css">   (des d'una carpeta de sprint)
+   <link rel="stylesheet" href="css/estils.css">     (des de l'arrel) */
 
 :root {
   --mari: #0e201a;
@@ -57,6 +57,7 @@ a:hover { text-decoration: underline; }
   border-radius: 999px;
   font-size: 0.85rem;
   text-decoration: none;
+  transition: background 0.2s ease;
 }
 .hero-nav a:hover { background: rgba(255, 255, 255, 0.24); text-decoration: none; }
 
@@ -90,33 +91,55 @@ main { padding-bottom: 50px; }
 .panell {
   background: var(--blanc);
   border-radius: var(--radi);
-  box-shadow: 0 12px 32px rgba(18, 37, 66, 0.16);
+  border: 1px solid var(--vora);
+  box-shadow: 0 12px 32px rgba(18, 37, 66, 0.12);
   margin-top: -42px;
   padding: 32px 34px;
   position: relative;
   z-index: 1;
+  overflow: hidden; /* Evita que el contingut o imatges en desbordin el marc */
 }
 
 /* ---------- Portada ---------- */
-.portada-hero { text-align: center; }
+.portada-hero {
+  text-align: center;
+}
+
+.portada-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
 .portada-hero img.imatge-portada {
-  max-width: 300px;
+  max-width: 320px;
   width: 100%;
   height: auto;
-  margin-bottom: 22px;
+  object-fit: contain;
+  margin: 0;
 }
 
 .fitxa-alumne {
-  display: inline-block;
+  display: block;
   background: var(--fons);
   border: 1px solid var(--vora);
   border-radius: var(--radi);
-  padding: 14px 22px;
-  margin: 20px 0;
+  padding: 16px 24px;
   text-align: left;
 }
-.fitxa-alumne p { margin: 3px 0; }
+.fitxa-alumne p { margin: 4px 0; }
 .fitxa-alumne strong { color: var(--mari); }
+
+.accions-portada {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
 
 .boto {
   display: inline-block;
@@ -126,9 +149,12 @@ main { padding-bottom: 50px; }
   border-radius: var(--radi);
   font-weight: 600;
   text-decoration: none !important;
-  margin-top: 8px;
+  transition: background 0.2s ease, transform 0.1s ease;
 }
-.boto:hover { background: var(--mari); }
+.boto:hover {
+  background: var(--mari);
+  transform: translateY(-1px);
+}
 
 /* ---------- Graella de targetes (sprints / apartats) ---------- */
 .rejilla-targetes {
@@ -164,14 +190,39 @@ main { padding-bottom: 50px; }
 .targeta h3 { margin: 0 0 4px; color: var(--tinta); font-size: 1.05rem; }
 .targeta p { margin: 0; color: var(--tinta-suau); font-size: 0.9rem; }
 
-h1, h2 { color: var(--mari); }
+h1, h2, h3 { color: var(--mari); }
 
 .consell {
   color: var(--tinta-suau);
   font-size: 0.9rem;
   margin-top: 18px;
 }
-.consell code { background: var(--fons); padding: 1px 5px; border-radius: 4px; }
+
+/* ---------- Format de codi i blocs pre ---------- */
+code {
+  background: var(--fons);
+  color: var(--mari);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--vora);
+  font-family: Consolas, Monaco, "Andale Mono", monospace;
+  font-size: 0.9em;
+}
+
+pre {
+  background: #1e293b;
+  color: #f8fafc;
+  padding: 16px;
+  border-radius: var(--radi);
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
+pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  border: none;
+}
 
 /* ---------- Taula d'apartats (índex intern d'un sprint, amb ancoratges) ---------- */
 .taula-apartats {
@@ -204,13 +255,15 @@ h1, h2 { color: var(--mari); }
 .apartat h2 { margin-top: 0; }
 .apartat img {
   max-width: 100%;
+  height: auto;
   border-radius: var(--radi);
   border: 1px solid var(--vora);
   margin: 14px 0;
+  display: block;
 }
 .apartat ul { padding-left: 22px; }
 .apartat li { margin: 4px 0; }
-.tornar-index { font-size: 0.85rem; }
+.tornar-index { font-size: 0.85rem; margin-top: 16px; }
 
 /* ---------- Peu de pàgina: llicència i autoria (fix a totes les pàgines) ---------- */
 footer.peu {
@@ -243,3 +296,13 @@ footer.peu .autoria strong { color: var(--tinta); }
 .bloc-llicencia h3 { margin: 0 0 8px; font-size: 1rem; color: var(--mari); }
 .bloc-llicencia p { margin: 6px 0; font-size: 0.92rem; }
 .bloc-llicencia .badge-cc { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+
+/* ---------- Adaptació Responsive ---------- */
+@media (max-width: 600px) {
+  .panell { padding: 20px 18px; }
+  .hero-titol h1 { font-size: 1.6rem; }
+  .portada-grid { flex-direction: column; text-align: center; }
+  .fitxa-alumne { width: 100%; }
+  .accions-portada { flex-direction: column; }
+  .boto { width: 100%; text-align: center; }
+}
