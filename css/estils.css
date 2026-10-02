@@ -297,6 +297,16 @@ footer.peu .autoria strong { color: var(--tinta); }
 .bloc-llicencia p { margin: 6px 0; font-size: 0.92rem; }
 .bloc-llicencia .badge-cc { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
 
+.apartat video,
+.video-demostració {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radi);
+  border: 1px solid var(--vora);
+  margin: 14px 0;
+  display: block;
+}
+
 /* ---------- Adaptació Responsive ---------- */
 @media (max-width: 600px) {
   .panell { padding: 20px 18px; }
