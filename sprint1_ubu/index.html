@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sprint 1 · Instal·lació i configuració inicial</title>
+<title>Sprint 1 · Pin Package (APT Pinning)</title>
 <link rel="stylesheet" href="../css/estils.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
   </nav>
   <div class="hero-titol">
     <p class="miguetes"><a href="../index.html">Portada</a> / <a href="../sprints_ubu.html">Índex de sprints Ubuntu</a> / Sprint 1</p>
-    <h1>Sprint 1 · Instal·lació i configuració inicial</h1>
+    <h1>Sprint 1 · Gestió avançada de paquets (Pin Package)</h1>
     <p class="subtitol">Índex d'apartats d'aquest sprint</p>
   </div>
 </header>
@@ -30,151 +30,35 @@
         <tr><th>#</th><th>Apartat</th></tr>
       </thead>
       <tbody>
-        <tr><td>1</td><td><a href="#apartat1">Instal·lació de SO</a></td></tr>
-        <tr><td>2</td><td><a href="#apartat2">Punts de restauració</a></td></tr>
-        <tr><td>3</td><td><a href="#apartat3">Llicències</a></td></tr>
-        <tr><td>4</td><td><a href="#apartat4">Virtualització</a></td></tr>
-        <tr><td>5</td><td><a href="#apartat5">Gestors d'arrencada</a></td></tr>
-        <tr><td>6</td><td><a href="#apartat6">Xarxa bàsica</a></td></tr>
-        <tr><td>7</td><td><a href="#apartat7">Comandes generals</a></td></tr>
-        <tr><td>8</td><td><a href="#apartat8">Instal·lacions d'aplicacions</a></td></tr>
+        <tr><td>1</td><td><a href="#apartat1">Pin Package (Bloqueig de paquets amb APT)</a></td></tr>
       </tbody>
     </table>
 
     <article class="apartat" id="apartat1">
-      <h2>1. Instal·lació de SO</h2>
-      <p>Per a la realització d'aquesta pràctica s'ha dut a terme la instal·lació des de zero del sistema operatiu <strong>Ubuntu Desktop (versió LTS)</strong> en un entorn virtualitzat utilitzant l'hipervisor <strong>VirtualBox</strong>. Aquest procés estableix la base del sistema per a un ús general i de desenvolupament informàtic.</p>
-      <p>Abans de procedir amb l'assistent, s'ha creat una màquina virtual assignant-li els recursos necessaris: 4 GB de memòria RAM, 2 vCPUs i un disc dur virtual dinàmic de 25 GB.</p>
+      <h2>1. Pin Package (Bloqueig de paquets amb APT)</h2>
+      <p>Aquesta secció explica com utilitzar la funcionalitat de <strong>pinning</strong> (o fixació/bloqueig de paquets) en el gestor de paquets APT d'Ubuntu. Aquesta tècnica permet controlar quina versió d'un paquet s'ha d'instal·lar o evitar que un paquet concret s'actualitzi automàticament durant les actualitzacions generals del sistema (<code>sudo apt upgrade</code>).</p>
 
-      <h3>Pas a pas del procés d'instal·lació:</h3>
+      <h3>Mètodes principals de configuració:</h3>
       <ul>
-        <li><strong>Arrencar des de la imatge ISO:</strong> S'ha descarregat la ISO oficial d'Ubuntu i s'ha muntat a la unitat d'òptica virtual. En iniciar la màquina, el gestor d'arrencada carrega directament l'assistent d'instal·lació.</li>
-        <li><strong>Triar l'idioma i la distribució de teclat:</strong> Es selecciona l'idioma del sistema (Català / Espanyol) i es configura la distribució de teclat per assegurar que caràcters especials com accents, símbols i la c trencada (ç) funcionin correctament.</li>
-        <li><strong>Configurar el particionat del disc:</strong> Es tria l'opció de particionat automàtic sobre el disc virtual de 25 GB. Aquest mètode crea un sistema de fitxers principal <code>ext4</code> per a l'arrel (<code>/</code>) i assigna un espai d'intercanvi (<code>swap</code>). <strong>Aquest pas és irreversible</strong>, ja que aplica un formatat complet al disc de destinació.</li>
-        <li><strong>Configuració d'usuari i nom de l'equip:</strong> Es defineix el nom de la màquina (<em>hostname</em>: <code>ubuntu-practica0</code>), el nom de l'usuari principal i la contrasenya d'accés amb privilegis d'administració (<code>sudo</code>).</li>
-        <li><strong>Còpia de fitxers i reinici:</strong> S'espera a que finalitzi el procés de còpia d'arxius del sistema. Un cop completat, s'extreu la imatge ISO virtual de la unitat i es reinicia la màquina virtual.</li>
+        <li><strong>Bloqueig ràpid d'actualitzacions (apt-mark):</strong> Per evitar que un paquet s'actualitzi de manera temporal o permanent, s'utilitza la comanda <code>sudo apt-mark hold &lt;nom_paquet&gt;</code>. Per desfer el bloqueig, es fa servir <code>unhold</code>.</li>
+        <li><strong>Configuració de preferències avançades (APT Preferences):</strong> Creant un fitxer a <code>/etc/apt/preferences.d/</code> es poden definir regles específiques assignant prioritats (<em>Pin-Priority</em>) a diferents versions o orígens de paquets.</li>
       </ul>
 
-      <p>A continuació es mostren les captures de pantalla corresponents al procés d'instal·lació:</p>
+      <h3>Exemple pràctic de bloqueig:</h3>
+      <p>Per exemple, per fixar la versió del servidor web <code>nginx</code> i evitar actualitzacions no desitjades:</p>
+      <pre><code># Executar la comanda de bloqueig
+sudo apt-mark hold nginx
 
-      <img src="../img/01_instalacio_idioma.png" alt="Captura de pantalla de l'assistent d'instal·lació d'Ubuntu triant idioma i teclat">
-      <p><em>Imatge 1.1: Selecció d'idioma i configuració de la distribució de teclat a l'assistent.</em></p>
+# Comprovar la llista de paquets retinguts
+apt-mark showhold</code></pre>
 
-      <img src="../img/02_particionat_disc.png" alt="Captura de pantalla del particionat de disc a la instal·lació d'Ubuntu">
-      <p><em>Imatge 1.2: Selecció del mètode de particionat automàtic sobre la unitat de disc virtual.</em></p>
+      <p>A continuació es mostra la verificació del procés d'aplicació d'un pin package:</p>
 
-      <p><strong>Verificació final:</strong> Un cop reiniciat el sistema, es comprova que l'escriptori d'Ubuntu arrenca correctament, es carrega la interfície gràfica (GNOME) i el sistema reconeix tot el maquinari virtualitzat sense cap mena d'error.</p>
+      <img src="../img/01_pin_package.png" alt="Captura de pantalla de la comanda apt-mark hold i la verificació del paquet">
+      <p><em>Imatge 1.1: Aplicació i comprovació del bloqueig d'un paquet mitjançant apt-mark.</em></p>
 
-      <img src="../img/03_escriptori_ubuntu.png" alt="Captura de pantalla de l'escriptori d'Ubuntu ja instal·lat i funcional">
-      <p><em>Imatge 1.3: Escriptori principal d'Ubuntu inicialitzat correctament després del primer reinici.</em></p>
+      <p><strong>Verificació final:</strong> Quan s'executa un <code>sudo apt upgrade</code>, el sistema notifica que el paquet es troba en estat <em>kept back</em> (mantingut en la versió actual), confirmant que el pinning funciona correctament.</p>
 
-      <p class="tornar-index"><a href="#index-apartats">↑ Tornar a l'índex</a></p>
-    </article>
-    <article class="apartat" id="apartat2">
-      <h2>2. Punts de restauració</h2>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-         ut aliquip ex ea commodo consequat. Els punts de restauració són
-         <strong>imprescindibles</strong> per poder recuperar el sistema en cas
-         de problemes.</p>
-      <ul>
-        <li>Crear un punt de restauració antes de canvis importants.</li>
-        <li>Verificar que els punts es guarden correctament.</li>
-        <li>Restaurar el sistema si és necessari.</li>
-      </ul>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-         dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-         proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      <p class="tornar-index"><a href="#index-apartats">↑ Tornar a l'índex</a></p>
-    </article>
-    <article class="apartat" id="apartat3">
-      <h2>3. Llicències</h2>
-      <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui
-         blanditiis praesentium voluptatum deleniti atque corrupti. Cada
-         programari instal·lat té una <strong>llicència específica</strong>
-         que cal respectar.</p>
-      <img src="../img/exemple.svg" alt="Exemple de captura de pantalla de llicències">
-      <ul>
-        <li>Verificar la llicència de cada programari.</li>
-        <li>Documentar les llicències instal·lades.</li>
-        <li>Assegurar-se del compliment legal.</li>
-      </ul>
-      <p class="tornar-index"><a href="#index-apartats">↑ Tornar a l'índex</a></p>
-    </article>
-    <article class="apartat" id="apartat4">
-      <h2>4. Virtualització</h2>
-      <p>Et harum quidem rerum facilis est et expedita distinctio. Nam libero
-         tempore, cum soluta nobis est eligendi optio cumque nihil impedit.
-         La virtualització permet executar múltiples sistemes operatius:</p>
-      <ul>
-        <li>Instal·lar un hipervisor (VirtualBox, KVM, etc).</li>
-        <li>Crear màquines virtuals.</li>
-        <li>Configurar recursos i xarxa virtual.</li>
-      </ul>
-      <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
-         fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem
-         sequi nesciunt.</p>
-      <p class="tornar-index"><a href="#index-apartats">↑ Tornar a l'índex</a></p>
-    </article>
-    <article class="apartat" id="apartat5">
-      <h2>5. Gestors d'arrencada</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Un cop arrencat
-         el suport d'instal·lació, cal seguir l'assistent i triar les opcions de
-         particionat abans de continuar. <strong>El gestor d'arrencada</strong> és
-         responsable de carregar el kernel del SO.</p>
-      <ul>
-        <li>Configurar l'ordre d'arrencada.</li>
-        <li>Gestionar el timeout del menú.</li>
-        <li>Actualitzar la configuració si és necessari.</li>
-      </ul>
-      <img src="../img/exemple.svg" alt="Exemple de captura de pantalla del gestor d'arrencada">
-      <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-         Un cop configurat, verifica que l'arrencada és correcta.</p>
-      <p class="tornar-index"><a href="#index-apartats">↑ Tornar a l'índex</a></p>
-    </article>
-    <article class="apartat" id="apartat6">
-      <h2>6. Xarxa bàsica</h2>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-         ut aliquip ex ea commodo consequat. La configuració de xarxa és
-         <strong>imprescindible</strong> per poder actualitzar el sistema i
-         instal·lar programari nou.</p>
-      <ul>
-        <li>Comprovar l'adreça IP assignada amb <code>ip a</code>.</li>
-        <li>Configurar una IP estàtica si el servei ho requereix.</li>
-        <li>Verificar la connectivitat amb <code>ping</code>.</li>
-      </ul>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-         dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-         proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      <p class="tornar-index"><a href="#index-apartats">↑ Tornar a l'índex</a></p>
-    </article>
-    <article class="apartat" id="apartat7">
-      <h2>7. Comandes generals</h2>
-      <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui
-         blanditiis praesentium voluptatum deleniti atque corrupti. Cada
-         usuari ha de conèixer les <strong>comandes essencials</strong>
-         per navegar pel sistema.</p>
-      <img src="../img/exemple.svg" alt="Exemple de comandes generals">
-      <ul>
-        <li>Navegació per directoris: <code>ls</code>, <code>cd</code>, <code>pwd</code>.</li>
-        <li>Gestió de fitxers: <code>cp</code>, <code>mv</code>, <code>rm</code>.</li>
-        <li>Gestió de processos: <code>ps</code>, <code>kill</code>.</li>
-      </ul>
-      <p class="tornar-index"><a href="#index-apartats">↑ Tornar a l'índex</a></p>
-    </article>
-    <article class="apartat" id="apartat8">
-      <h2>8. Instal·lacions d'aplicacions</h2>
-      <p>Et harum quidem rerum facilis est et expedita distinctio. Nam libero
-         tempore, cum soluta nobis est eligendi optio cumque nihil impedit.
-         La instal·lació de programari és una tasca freqüent en l'administració
-         de sistemes:</p>
-      <ul>
-        <li>Usar el gestor de paquets del sistema.</li>
-        <li>Verificar dependències.</li>
-        <li>Configurar aplicacions dopo de la instal·lació.</li>
-      </ul>
-      <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
-         fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem
-         sequi nesciunt.</p>
       <p class="tornar-index"><a href="#index-apartats">↑ Tornar a l'índex</a></p>
     </article>
   </section>
