@@ -31,9 +31,13 @@
       </thead>
       <tbody>
         <tr><td>1</td><td><a href="#apartat1">Sistemes de fitxers i particions</a></td></tr>
+        <tr><td>2</td><td><a href="#apartat2">Pràctica de recuperació de fitxers després d'un formateig</a></td></tr>
       </tbody>
     </table>
 
+    <!-- ========================================== -->
+    <!-- APARTAT 1: TEORIA                          -->
+    <!-- ========================================== -->
     <article class="apartat" id="apartat1">
       <h2>1. Sistemes de fitxers i particions</h2>
 
@@ -131,7 +135,82 @@
           <p><em>Nota d'emmagatzematge:</em> Durant un formateig ràpid d'alt nivell, les dades realment no s'esborren cel·la per cel·la, sinó que s'elimina la taula d'índexs o el registre del sistema de fitxers. Els arxius originals romanen físicament al disc fins que són sobreescrits per informació nova.</p>
         </li>
       </ol>
-      <h3>Pràctica de recuperació de fitxers després d'un formateig</h3>
+
+      <p class="tornar-index"><a href="#index-apartats">↑ Tornar a l'índex</a></p>
+    </article>
+
+    <!-- ========================================== -->
+    <!-- APARTAT 2: PRÀCTICA GUIADA                 -->
+    <!-- ========================================== -->
+    <article class="apartat" id="apartat2">
+      <h2>2. Pràctica de recuperació de fitxers després d'un formateig</h2>
+      <p>L'objectiu d'aquesta pràctica és comprovar experimentalment que un formateig d'alt nivell no esborra les dades físiques del disc. Mitjançant un disc virtual de 200 MB, crearem fitxers, en formatarem la unitat, els recuperarem amb l'eina <code>photorec</code> i finalment realitzarem un esborrat segur de baix nivell.</p>
+
+      <h3>Pas 1: Creació de la carpeta de treball</h3>
+      <p>Instal·lem l'eina <code>testdisk</code> (que inclou <code>photorec</code>) i creem el directori <code>practica</code> per treballar de manera aïllada:</p>
+<pre><code>sudo apt install testdisk
+mkdir -p ~/practica
+cd ~/practica
+pwd</code></pre>
+
+      <h3>Pas 2: Observar els fitxers de prova a la carpeta</h3>
+      <p>Copiem una imatge <code>foto.jpg</code>, un document <code>apunts.pdf</code> i creem un fitxer de text amb una frase personalitzada des del terminal:</p>
+<pre><code>echo "El meu secret és que m'encanta la pizza amb pinya" > notes.txt
+ls -l</code></pre>
+      <img src="../img/pas2_fitxers.png" alt="Captura de pantalla mostrant els fitxers originals creats a la carpeta">
+
+      <h3>Pas 3: Crear el fitxer de zeros (Disc Virtual)</h3>
+      <p>Generem una imatge de disc virtual de 200 MB completament plena de zeros amb la comanda <code>dd</code>:</p>
+<pre><code>dd if=/dev/zero of=disc.img bs=1M count=200 status=progress
+ls -lh disc.img</code></pre>
+
+      <h3>Pas 4: Formatejar el disc i preparar-lo per a l'ús</h3>
+      <p>Assignem el sistema de fitxers <code>ext4</code> al disc virtual i el muntem al directori <code>/mnt/prova</code>:</p>
+<pre><code>mkfs.ext4 disc.img
+sudo mkdir -p /mnt/prova
+sudo mount -o loop disc.img /mnt/prova</code></pre>
+
+      <h3>Pas 5: Copiar els fitxers al disc virtual</h3>
+      <p>Copiem els tres fitxers de prova a la nova unitat muntada:</p>
+<pre><code>sudo cp foto.jpg apunts.pdf notes.txt /mnt/prova/
+ls -l /mnt/prova</code></pre>
+
+      <h3>Pas 6: Desar els hashes originals (Empremta digital)</h3>
+      <p>Generem el codi de verificació SHA-256 dels fitxers originals i el guardem a <code>originals.sha</code> per poder-los comparar més endavant:</p>
+<pre><code>sha256sum foto.jpg apunts.pdf notes.txt > originals.sha
+cat originals.sha</code></pre>
+      <img src="../img/pas6_hashes_originals.png" alt="Captura dels hashes SHA-256 dels fitxers originals">
+
+      <h3>Pas 7: Formatejar d'alt nivell el disc</h3>
+      <p>Desmuntem la unitat i li apliquem un formateig d'alt nivell mantenint l'estructura física intacta mitjançant l'opció <code>-E nodiscard</code>:</p>
+<pre><code>sudo umount /mnt/prova
+mkfs.ext4 -E nodiscard disc.img</code></pre>
+
+      <h3>Pas 8: Observar el contingut del disc després de formatar</h3>
+      <p>Tornem a muntar el disc per comprovar-ne l'estat. Els fitxers han desaparegut de la vista de l'usuari i només s'hi observa la carpeta <code>lost+found</code>:</p>
+<pre><code>sudo mount -o loop disc.img /mnt/prova
+ls -l /mnt/prova
+sudo umount /mnt/prova</code></pre>
+      <img src="../img/pas8_disc_buit.png" alt="Captura del contingut del disc buit després del formateig">
+
+      <h3>Pas 9: Recuperar els fitxers amb Photorec</h3>
+      <p>Executem <code>photorec</code> directament sobre la imatge del disc per tal de cercar les estructures i capçaleres dels fitxers perduts:</p>
+<pre><code>photorec /d recup /cmd disc.img options,fileopt,everything,enable,search</code></pre>
+
+      <h3>Pas 10: Comprovar fitxers trobats, comparar Hashes i extreure el text</h3>
+      <p>Verifiquem la carpeta <code>recup.1</code>. Comprovem que els hashes dels fitxers <code>.jpg</code> i <code>.pdf</code> recuperats són exactament idèntics als originals. A més, localitzem el fitxer de text pla utilitzant <code>strings</code> i <code>grep</code>:</p>
+<pre><code>ls recup.1
+sha256sum recup.1/*
+cat originals.sha
+strings -e S disc.img | grep pizza</code></pre>
+      <img src="../img/pas10_hashes_coincidents.png" alt="Captura comparant els hashes recuperats i la cerca de text amb grep">
+
+      <h3>Pas 11: Esborrat de baix nivell i comprovació final</h3>
+      <p>Sobreescribim físicament tots els blocs de la imatge de disc amb zeros (formateig de baix nivell) i tornem a intentar la recuperació i la cerca de text:</p>
+<pre><code>dd if=/dev/zero of=disc.img bs=1M count=200 conv=notrunc status=progress
+photorec /d recup_zeros /cmd disc.img options,fileopt,everything,enable,search
+strings -e S disc.img | grep pizza</code></pre>
+      <img src="../img/pas11_esborrat_total.png" alt="Captura comprovant que photorec no troba cap fitxer i grep no retorna cap línia">
       
       <p class="tornar-index"><a href="#index-apartats">↑ Tornar a l'índex</a></p>
     </article>
