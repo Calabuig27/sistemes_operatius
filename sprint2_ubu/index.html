@@ -1,112 +1,151 @@
-<!-- TAULA D'ÍNDEX DE L'SPRINT -->
-<a id="index-apartats"></a>
-<table class="taula-apartats">
-  <thead>
-    <tr><th>#</th><th>Apartat</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>1</td><td><a href="#apartat1">Sistemes de fitxers i particions</a></td></tr>
-  </tbody>
-</table>
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sprint 2: Sistemes de fitxers i particions</title>
+<link rel="stylesheet" href="../css/estils.css">
+</head>
+<body>
 
-<!-- ARTÍCLE DEL PUNT 1: TEORIA -->
-<article class="apartat" id="apartat1">
-  <h2>1. Sistemes de fitxers i particions</h2>
+<header class="hero">
+  <nav class="hero-nav">
+    <a href="../index.html">Portada</a>
+    <a href="../sprints_ubu.html">Índex de sprints Ubuntu</a>
+    <a href="../sprints_win.html">Índex de sprints Windows</a>
+    <a href="https://github.com/ismaPB/sistemes_operatius" target="_blank" rel="noopener">Codi a GitHub ↗</a>
+  </nav>
+  <div class="hero-titol">
+    <p class="miguetes"><a href="../index.html">Portada</a> / <a href="../sprints_ubu.html">Índex de sprints Ubuntu</a> / Sprint 2</p>
+    <h1>Sprint 2 · Sistemes de fitxers i particions</h1>
+    <p class="subtitol">Índex d'apartats d'aquest sprint</p>
+  </div>
+</header>
 
-  <h3>Estructura física i lògica d’un disc</h3>
-  <p>Per entendre com s'emmagatzema la informació, cal diferenciar entre l'organització física del suport i l'organització lògica que hi aplica el sistema operatiu:</p>
-  <ul>
-    <li><strong>Estructura física:</strong> Fa referència als components hardware i a com es disposa físicament la informació al mitjà d'emmagatzematge. En els discos magnètics tradicionals (HDD) es troba organitzada en plats, capçals, pistes, cilindres i sectors. En les unitats d'estat sòlid (SSD), s'estructura en cel·les de memòria flash organitzades en pàgines i blocs, sense parts mòbils.</li>
-    <li><strong>Estructura lògica:</strong> És l'organització que el sistema operatiu imposa sobre el disc físic per poder-lo utilitzar. Inclou la divisió en espais d'emmagatzematge (particions i volums), la creació de les estructures del sistema de fitxers i l'assignació d'unitats de lectura/escriptura (blocs o clusters).</li>
-  </ul>
+<main class="contenidor">
+  <section class="panell">
+    <a id="index-apartats"></a>
+    <table class="taula-apartats">
+      <thead>
+        <tr><th>#</th><th>Apartat</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><a href="#apartat1">Sistemes de fitxers i particions</a></td></tr>
+      </tbody>
+    </table>
 
-  <h3>Taules de particions: MBR vs. GPT</h3>
-  <p>Abans de crear un sistema de fitxers, cal definir l'esquema de particions del disc. Existeixen dos estàndards principals:</p>
-  
-  <table class="taula-apartats">
-    <thead>
-      <tr>
-        <th>Característica</th>
-        <th>MBR (Master Boot Record)</th>
-        <th>GPT (GUID Partition Table)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong>Antiguitat / Estàndard</strong></td>
-        <td>Estàndard antic (des de 1983).</td>
-        <td>Estàndard modern (associat a UEFI).</td>
-      </tr>
-      <tr>
-        <td><strong>Límit de capacitat</strong></td>
-        <td>Màxim 2 TB per disc.</td>
-        <td>Més de 9,4 ZB (Zettabytes).</td>
-      </tr>
-      <tr>
-        <td><strong>Nombre de particions</strong></td>
-        <td>Màxim 4 particions primàries (o 3 primàries i 1 estesa amb lògiques).</td>
-        <td>Fins a 128 particions primàries (en Windows).</td>
-      </tr>
-      <tr>
-        <td><strong>Redundància i seguretat</strong></td>
-        <td>Sense còpia de seguretat; si es malmet el sector d'arrencada, es perd l'accés.</td>
-        <td>Guarda còpies de seguretat de la taula al final del disc i utilitza valors CRC per detectar errors.</td>
-      </tr>
-    </tbody>
-  </table>
+    <article class="apartat" id="apartat1">
+      <h2>1. Sistemes de fitxers i particions</h2>
 
-  <h3>Estructura de la informació: Particions vs. Volums</h3>
-  <ul>
-    <li><strong>Partició:</strong> Divisió o fragmentació física/lògica delimitada d'un disc dur. Funciona com una unitat independent dins de la mateixa unitat física.</li>
-    <li><strong>Volum:</strong> Capa d'abstracció lògica que se situa per sobre de la partició. A diferència d'una partició simple, un volum té la capacitat d'agrupar i unificar l'espai de diferents particions que pertanyen a discos físics diferents (per exemple, mitjançant configuracions RAID per programari o gestors de volums com LVM).</li>
-  </ul>
-
-  <h3>Unitats mínimes d'emmagatzematge: Sector vs. Bloc (Cluster)</h3>
-  <ul>
-    <li><strong>Sector (512 bytes):</strong> És la unitat mínima d'emmagatzematge a nivell físic del disc. Aquesta mida ve determinada pel fabricant i no es pot canviar.</li>
-    <li><strong>Bloc o Cluster (4096 bytes per defecte):</strong> És la unitat mínima d'emmagatzematge a nivell lògic que utilitza el sistema de fitxers. Es pot configurar en formatejar la partició.</li>
-    <li><strong>Relació sector-bloc:</strong> Per defecte, el sistema operatiu no treballa directament amb sectors de 512 bytes, sinó amb blocs de 4096 bytes. Per tant, un bloc està format exactament per 8 sectors físics:</li>
-  </ul>
-  <pre><code>8 sectors × 512 bytes = 4096 bytes (1 bloc)</code></pre>
-
-  <h3>Fragmentació de la informació</h3>
-  <p>La fragmentació és la pèrdua d'eficiència en l'ús o l'accés a l'espai d'emmagatzematge:</p>
-  <ul>
-    <li>
-      <strong>Fragmentació interna:</strong> Es produeix a nivell del bloc de la partició.
+      <h3>Estructura física i lògica d’un disc</h3>
+      <p>Per entendre com s'emmagatzema la informació, cal diferenciar entre l'organització física del suport i l'organització lògica que hi aplica el sistema operatiu:</p>
       <ul>
-        <li><em>Com es genera:</em> Cada fitxer, per petit que sigui, ocupa com a mínim un bloc sencer. Si un fitxer pesa 100 bytes i la mida del bloc és de 4096 bytes, els 3996 bytes restants del bloc queden inutilitzats i es desperdicien.</li>
-        <li><em>Solució:</em> Reduir la mida del bloc en formatejar (encara que pot augmentar la sobrecarrega de gestió del sistema si hi ha molts fitxers).</li>
+        <li><strong>Estructura física:</strong> Fa referència als components hardware i a com es disposa físicament la informació al mitjà d'emmagatzematge. En els discos magnètics tradicionals (HDD) es troba organitzada en plats, capçals, pistes, cilindres i sectors. En les unitats d'estat sòlid (SSD), s'estructura en cel·les de memòria flash organitzades en pàgines i blocs, sense parts mòbils.</li>
+        <li><strong>Estructura lògica:</strong> És l'organització que el sistema operatiu imposa sobre el disc físic per poder-lo utilitzar. Inclou la divisió en espais d'emmagatzematge (particions i volums), la creació de les estructures del sistema de fitxers i l'assignació d'unitats de lectura/escriptura (blocs o clusters).</li>
       </ul>
-    </li>
-    <li>
-      <strong>Fragmentació externa:</strong> Es produeix a nivell de l'organització del disc.
+
+      <h3>Taules de particions: MBR vs. GPT</h3>
+      <p>Abans de crear un sistema de fitxers, cal definir l'esquema de particions del disc. Existeixen dos estàndards principals:</p>
+
+      <table class="taula-apartats">
+        <thead>
+          <tr>
+            <th>Característica</th>
+            <th>MBR (Master Boot Record)</th>
+            <th>GPT (GUID Partition Table)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Antiguitat / Estàndard</strong></td>
+            <td>Estàndard antic (des de 1983).</td>
+            <td>Estàndard modern (associat a UEFI).</td>
+          </tr>
+          <tr>
+            <td><strong>Límit de capacitat</strong></td>
+            <td>Màxim 2 TB per disc.</td>
+            <td>Més de 9,4 ZB (Zettabytes).</td>
+          </tr>
+          <tr>
+            <td><strong>Nombre de particions</strong></td>
+            <td>Màxim 4 particions primàries (o 3 primàries i 1 estesa amb lògiques).</td>
+            <td>Fins a 128 particions primàries (en Windows).</td>
+          </tr>
+          <tr>
+            <td><strong>Redundància i seguretat</strong></td>
+            <td>Sense còpia de seguretat; si es malmet el sector d'arrencada, es perd l'accés.</td>
+            <td>Guarda còpies de seguretat de la taula al final del disc i utilitza valors CRC per detectar errors.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Estructura de la informació: Particions vs. Volums</h3>
       <ul>
-        <li><em>Com es genera:</em> Es troba quan els fitxers no es poden guardar de forma contínua (en línia) al disc, sinó que es divideixen en diferents fragments repartits en els espais lliures que queden desocupats. Això alenteix la lectura en discos mecànics (HDD).</li>
-        <li><em>Solució:</em> Executar un desfragmentador de disc. Aquest procés reorganitza i desplaça els blocs de fitxers cap a l'inici (cap a la "esquerra") per deixar tot l'espai lliure contigu.</li>
+        <li><strong>Partició:</strong> Divisió o fragmentació física/lògica delimitada d'un disc dur. Funciona com una unitat independent dins de la mateixa unitat física.</li>
+        <li><strong>Volum:</strong> Capa d'abstracció lògica que se situa per sobre de la partició. A diferència d'una partició simple, un volum té la capacitat d'agrupar i unificar l'espai de diferents particions que pertanyen a discos físics diferents (per exemple, mitjançant configuracions RAID per programari o gestors de volums com LVM).</li>
       </ul>
-    </li>
-  </ul>
 
-  <h3>Sistemes de fitxers i formateig</h3>
-  <p><strong>Concepte de sistema de fitxers:</strong> És l'estructura de dades que es defineix al damunt d'una nova partició per tal que el sistema operatiu pugui organitzar, llegir, escriure, cercar i gestionar els fitxers i directoris.</p>
-  
-  <p><strong>Tipus de formateig:</strong> Formatejar és el procés de preparar un suport d'emmagatzematge per al seu ús:</p>
-  <ol>
-    <li>
-      <strong>Formateig de baix nivell (Low-Level Format):</strong>
-      <p>Es realitza directament a la fàbrica o amb eines molt específiques del fabricant del disc. Divideix el disc físicament creant les pistes i els sectors originals. Elimina la informació de manera irreversible.</p>
-    </li>
-    <li>
-      <strong>Formateig de mig nivell:</strong>
-      <p>Crea i defineix la taula de particions (MBR o GPT) i comprova la integritat de l'estructura física del disc detectant sectors defectuosos.</p>
-    </li>
-    <li>
-      <strong>Formateig d'alt nivell (High-Level Format):</strong>
-      <p>Es realitza directament des del sistema operatiu sobre una partició concreta. En aplicar-lo, s'esborra l'estructura del sistema de fitxers anterior i se'n crea una de nova.</p>
-      <p><em>Nota d'emmagatzematge:</em> Durant un formateig ràpid d'alt nivell, les dades realment no s'esborren cel·la per cel·la, sinó que s'elimina la taula d'índexs o el registre del sistema de fitxers. Els arxius originals romanen físicament al disc fins que són sobreescrits per informació nova.</p>
-    </li>
-  </ol>
+      <h3>Unitats mínimes d'emmagatzematge: Sector vs. Bloc (Cluster)</h3>
+      <ul>
+        <li><strong>Sector (512 bytes):</strong> És la unitat mínima d'emmagatzematge a nivell físic del disc. Aquesta mida ve determinada pel fabricant i no es pot canviar.</li>
+        <li><strong>Bloc o Cluster (4096 bytes per defecte):</strong> És la unitat mínima d'emmagatzematge a nivell lògic que utilitza el sistema de fitxers. Es pot configurar en formatejar la partició.</li>
+        <li><strong>Relació sector-bloc:</strong> Per defecte, el sistema operatiu no treballa directament amb sectors de 512 bytes, sinó amb blocs de 4096 bytes. Per tant, un bloc està format exactament per 8 sectors físics:</li>
+      </ul>
+      <pre><code>8 sectors × 512 bytes = 4096 bytes (1 bloc)</code></pre>
 
-  <p class="tornar-index"><a href="#index-apartats">↑ Tornar a l'índex</a></p>
-</article>
+      <h3>Fragmentació de la informació</h3>
+      <p>La fragmentació és la pèrdua d'eficiència en l'ús o l'accés a l'espai d'emmagatzematge:</p>
+      <ul>
+        <li>
+          <strong>Fragmentació interna:</strong> Es produeix a nivell del bloc de la partició.
+          <ul>
+            <li><em>Com es genera:</em> Cada fitxer, per petit que sigui, ocupa com a mínim un bloc sencer. Si un fitxer pesa 100 bytes i la mida del bloc és de 4096 bytes, els 3996 bytes restants del bloc queden inutilitzats i es desperdicien.</li>
+            <li><em>Solució:</em> Reduir la mida del bloc en formatejar (encara que pot augmentar la sobrecarrega de gestió del sistema si hi ha molts fitxers).</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Fragmentació externa:</strong> Es produeix a nivell de l'organització del disc.
+          <ul>
+            <li><em>Com es genera:</em> Es troba quan els fitxers no es poden guardar de forma contínua (en línia) al disc, sinó que es divideixen en diferents fragments repartits en els espais lliures que queden desocupats. Això alenteix la lectura en discos mecànics (HDD).</li>
+            <li><em>Solució:</em> Executar un desfragmentador de disc. Aquest procés reorganitza i desplaça els blocs de fitxers cap a l'inici (cap a la "esquerra") per deixar tot l'espai lliure contigu.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>Sistemes de fitxers i formateig</h3>
+      <p><strong>Concepte de sistema de fitxers:</strong> És l'estructura de dades que es defineix al damunt d'una nova partició per tal que el sistema operatiu pugui organitzar, llegir, escriure, cercar i gestionar els fitxers i directoris.</p>
+      
+      <p><strong>Tipus de formateig:</strong> Formatejar és el procés de preparar un suport d'emmagatzematge per al seu ús:</p>
+      <ol>
+        <li>
+          <strong>Formateig de baix nivell (Low-Level Format):</strong>
+          <p>Es realitza directament a la fàbrica o amb eines molt específiques del fabricant del disc. Divideix el disc físicament creant les pistes i els sectors originals. Elimina la informació de manera irreversible.</p>
+        </li>
+        <li>
+          <strong>Formateig de mig nivell:</strong>
+          <p>Crea i defineix la taula de particions (MBR o GPT) i comprova la integritat de l'estructura física del disc detectant sectors defectuosos.</p>
+        </li>
+        <li>
+          <strong>Formateig d'alt nivell (High-Level Format):</strong>
+          <p>Es realitza directament des del sistema operatiu sobre una partició concreta. En aplicar-lo, s'esborra l'estructura del sistema de fitxers anterior i se'n crea una de nova.</p>
+          <p><em>Nota d'emmagatzematge:</em> Durant un formateig ràpid d'alt nivell, les dades realment no s'esborren cel·la per cel·la, sinó que s'elimina la taula d'índexs o el registre del sistema de fitxers. Els arxius originals romanen físicament al disc fins que són sobreescrits per informació nova.</p>
+        </li>
+      </ol>
+
+      <p class="tornar-index"><a href="#index-apartats">↑ Tornar a l'índex</a></p>
+    </article>
+  </section>
+</main>
+
+<footer class="peu">
+  <p class="peu-llicencia">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ca" target="_blank" rel="license noopener">
+      <img src="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png" alt="Llicència Creative Commons Reconeixement-NoComercial-CompartirIgual 4.0" width="88" height="31">
+    </a>
+    <span>Contingut sota llicència <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ca" target="_blank" rel="license noopener">CC BY-NC-SA 4.0</a></span>
+  </p>
+  <p class="autoria">Autor/a: <strong>Marc Calabuig Piñol</strong> · Pràctica 0 · Sistemes Operatius (ISOPJ1)</p>
+</footer>
+
+</body>
+</html>
